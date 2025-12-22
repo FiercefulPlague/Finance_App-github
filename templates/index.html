@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+  <meta charset="UTF-8">
+  <title>Finance App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f3f3f3;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 540px;
+      background: #fff;
+      padding: 28px;
+      border-radius: 14px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    h1 { margin-top: 0; }
+
+    /* ---- Menu ---- */
+    .menu {
+      display: grid;
+      gap: 16px;
+    }
+
+    .menu a {
+      padding: 14px;
+      border-radius: 12px;
+      background: #111;
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .menu a.secondary {
+      background: #e5e5e5;
+      color: #000;
+    }
+
+    /* ---- Form ---- */
+    form {
+      display: grid;
+      gap: 14px;
+      text-align: left;
+    }
+
+    label {
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    input, select, textarea {
+      padding: 10px 12px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: 1px solid #d0d0d0;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      background: #111;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .back {
+      margin-top: 20px;
+      display: inline-block;
+      font-size: 14px;
+      text-decoration: none;
+      color: #555;
+    }
+
+    /* ---- Results ---- */
+    ul { padding-left: 18px; }
+
+    /* ---- Modal ---- */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal {
+      background: #fff;
+      padding: 24px 28px;
+      border-radius: 14px;
+      max-width: 360px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .modal.success h2 { color: #1f7a3d; }
+    .modal.error h2 { color: #a42828; }
+  </style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <!-- HOME -->
+  {% if page == "home" %}
+    <h1>Finance App</h1>
+    <div class="menu">
+      <a href="/?page=add">🧾 Add transactions</a>
+      <a href="/?page=view" class="secondary">📊 Matyti išlaidas</a>
+    </div>
+  {% endif %}
+
+  <!-- ADD -->
+  {% if page == "add" %}
+    <h1>Add transactions</h1>
+
+    <form method="POST">
+      <label>Date
+        <input type="date" name="date" required>
+      </label>
+
+      <label>Type
+        <select name="type">
+          <option value="expense">Expense</option>
+          <option value="income">Income</option>
+        </select>
+      </label>
+
+      <label>Person
+        <select name="person">
+          <option value=""></option> <!--Names of people from the database-->
+        </select>
+      </label>
+
+      <label>Amount(€)
+        <input type="number" step="0.01" name="amount" required>
+      </label>
+
+      <label>Category
+        <select name="category">
+          <option></option> <!--Add categories from the database-->
+        </select>
+      </label>
+
+      <label>Note
+        <textarea name="note"></textarea>
+      </label>
+
+      <button type="submit">Save</button>
+    </form>
+
+    <a href="/" class="back">← Back</a>
+  {% endif %}
+
+  <!-- VIEW -->
+  {% if page == "view" %}
+    <h1>See transactions</h1>
+
+    <form method="POST">
+      <label>From
+        <input type="date" name="from" required value="{{ today }}">
+      </label>
+
+      <label>To
+        <input type="date" name="to" required value="{{ today }}">
+      </label>
+
+      <button type="submit">Show</button>
+    </form>
+
+    {% if results %}
+      <hr style="margin:24px 0;">
+      <p>📥 Income: <strong>{{ summary.income or 0 }} €</strong></p>
+      <p>📤 Expense: <strong>{{ summary.expense or 0 }} €</strong></p>
+      <p>➖ Balance: <strong>{{ (summary.income or 0) - (summary.expense or 0) }} €</strong></p>
+
+      <h3>Transactions by category name</h3>
+      <ul>
+        {% for row in categories %}
+          <li>{{ row.category }} – {{ row.total }} €</li>
+        {% else %}
+          <li>Nėra duomenų</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <a href="/" class="back">← Atgal</a>
+  {% endif %}
+
+</div>
+
+{% if message %}
+<div class="overlay">
+  <div class="modal {{ 'success' if success else 'error' }}">
+    <h2>{{ 'Sucess!' if success else 'Error' }}</h2>
+    <p>{{ message }}</p>
+    <button onclick="window.location.href='/?page=add'">OK</button>
+  </div>
+</div>
+{% endif %}
+</body>
+</html>
