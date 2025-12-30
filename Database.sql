@@ -1,11 +1,11 @@
-CREATE DATABASE finance
+CREATE DATABASE finance_app
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
 
 USE finance_app;
 
 CREATE TABLE transactions (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id INT AUTO_INCREMENT PRIMARY KEY,
   date DATE NOT NULL, -- Date of the transaction
   amount DECIMAL(10,2) NOT NULL -- Stores transaction amount
 	CHECK (amount > 0), -- Checks that amount is positive
