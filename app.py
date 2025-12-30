@@ -1,11 +1,16 @@
 from flask import Flask, render_template, request
-import sqlite3
+import mysql.connector
 from datetime import date
 
 app = Flask(__name__)
 
 # --- DB CONNECTION ---
-db = sqlite3.connect("finance.db", check_same_thread=False)
+db = mysql.connector.connect(
+    host="localhost",
+    user="", #MySQL username here
+    password="", #MySQL password here
+    database="finance_app"
+)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
