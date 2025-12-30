@@ -12,10 +12,10 @@ It allows users to add income and expenses and store them in a local database.
 - Beginner-friendly structure and comments
 - No personal data included
 - Technologies Used
-- Python
-- Flask
-- MySQL
- -HTML
+  - Python
+  - Flask
+  - MySQL
+  - HTML
 ## Project Structure
 finance-app/ <br>
 │ ├── app.py # Flask backend logic <br>
