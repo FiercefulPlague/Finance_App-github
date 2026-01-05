@@ -28,7 +28,7 @@ finance-app/ <br>
 
 ## Installation & Setup
 1️ Clone the repository
-git clone https://github.com/FiercefulPlague/Personal_finance_web.git cd Personal_finance_web
+git clone https://github.com/FiercefulPlague/Finance_App-github.git
 
 2️ Install dependencies <br>
 -- pip install flask --
